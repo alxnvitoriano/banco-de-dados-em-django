@@ -1,0 +1,64 @@
+{% extends 'navBar.html' %}
+{% block conteudo %}
+<script>
+    function buscarCliente() {
+        var entradaBusca, filtro, table, tr, td, i, j, visibilidade;
+        entradaBusca = document.getElementById("buscarCliente");
+        filtro = entradaBusca.value.toUpperCase();
+        table = document.getElementById("tableClientes");
+        tr = document.getElementById("tableClientes").getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            visibilidade = false;
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filtro) > -1) {
+                    visibilidade = true;
+                }
+            }
+            if (visibilidade === true) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+<div class="container-lista">
+
+    {% comment %} TÍTULO {% endcomment %}
+    <div class="titulo-tabela">
+        <h1>Lista de Clientes</h1>
+    </div>
+
+    {% comment %} CONTEÚDO DA TELA {% endcomment %}
+    <div class="conteudo-tabela">        
+        <input type="text" id="buscarCliente" onkeyup="buscarCliente()" placeholder="Buscar Cliente...">        
+        <table id="tableClientes" class="table table-bordered table-striped">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Endereço</th>
+                <th>Editar</th>
+            </tr>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{cliente.id_cliente}}</td>
+                <td>{{cliente.nome}}</td>
+                <td>{{cliente.cpf}}</td>
+                <td>{{cliente.telefone}}</td>
+                <td>{{cliente.email}}</td>
+                <td>{{cliente.endereco}}</td>
+                <td><a href="{% url 'infoCliente' %}{{cliente.id_cliente}}">Editar</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

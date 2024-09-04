@@ -1,0 +1,65 @@
+{% extends 'navBar.html' %}
+{% block conteudo %}
+<script>
+    function buscaAgenda() {
+        var entradaBusca, filtro, table, tr, td, i, j, visibilidade;
+        entradaBusca = document.getElementById("buscaAgenda");
+        filtro = entradaBusca.value.toUpperCase();
+        table = document.getElementById("tableAgenda");
+        tr = document.getElementById("tableAgenda").getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            visibilidade = false;
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filtro) > -1) {
+                    visibilidade = true;
+                }
+            }
+            if (visibilidade === true) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+<div class="container-lista">
+
+    {% comment %} TÍTULO {% endcomment %}
+    <div class="titulo-tabela">
+        <h1>Agenda de Serviços</h1>
+    </div>
+
+    {% comment %} CONTEÚDO {% endcomment %}
+    <div class="conteudo-tabela">
+    
+        {% comment %} BUSCA {% endcomment %}
+        <input type="text" id="buscaAgenda" onkeyup="buscaAgenda()" placeholder="Buscar Serviço...">
+        <table id="tableAgenda">
+            <tr>
+                <th>ID</th>
+                <th>Data e Hora</th>
+                <th>Cliente</th>
+                <th>Pet</th>
+                <th>Serviço</th>
+                <th>Funcionário</th>
+                <th>Observações</th>
+                <th>Excluir</th>
+            </tr>
+            {% for servico in agendaOrganizada %}
+            <tr>
+                <td>{{servico.id_servico}}</td>
+                <td>{{servico.datahora}}</td>
+                <td>{{servico.cliente_id}}</td>
+                <td>{{servico.pet_id}}</td>
+                <td>{{servico.servico_id}}</td>
+                <td>{{servico.funcionario_id}}</td>
+                <td>{{servico.observacoes}}</td>
+                <td><a href="{% url 'excluirServicoDoDB' %}{{servico.id_servico}}">Excluir</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+{% endblock %}

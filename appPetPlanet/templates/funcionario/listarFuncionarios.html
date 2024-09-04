@@ -1,0 +1,70 @@
+{% extends 'navBar.html' %}
+{% block conteudo %}
+<script>
+    function buscaFuncionario() {
+        var entradaBusca, filtro, table, tr, td, i, j, visibilidade;
+        entradaBusca = document.getElementById("buscaFuncionario");
+        filtro = entradaBusca.value.toUpperCase();
+        table = document.getElementById("tabelaFuncionarios");
+        tr = document.getElementById("tableFuncionarios").getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            visibilidade = false;
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filtro) > -1) {
+                    visibilidade = true;
+                }
+            }
+            if (visibilidade === true) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+<div class="container-lista">
+
+    {% comment %} TÍTULO {% endcomment %}
+    <div class="titulo-tabela">
+        <h1>Lista de Funcionários</h1>
+    </div>
+
+    {% comment %} CONTEÚDO DA TELA {% endcomment %}
+    <div class="conteudo-tabela">    
+        <input type="text" id="buscaFuncionario" onkeyup="buscaFuncionario()" placeholder="Buscar Funcionário...">
+    
+        <table id="tableFuncionarios" class="table table-bordered table-striped">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Endereço</th>
+                <th>Cargo</th>
+                <th>Salário</th>
+                <th>Editar</th>
+            </tr>
+            {% for funcionario in funcionarios %}
+            <tr>
+                <td>{{funcionario.id_funcionario}}</td>
+                <td>{{funcionario.nome}}</td>
+                <td>{{funcionario.cpf}}</td>
+                <td>{{funcionario.telefone}}</td>
+                <td>{{funcionario.email}}</td>
+                <td>{{funcionario.endereco}}</td>
+                <td>{{funcionario.cargo}}</td>
+                <td>{{funcionario.salario}}</td>
+                <td><a href="{% url 'infoFuncionario' %}{{funcionario.id_funcionario}}">Editar</a></td>
+            </tr>
+    
+            {% endfor %}
+    
+        </table>
+    </div>
+
+</div>
+{% endblock %}
